@@ -20,4 +20,4 @@ if __name__ == "__main__":
 I go crazy when I hear a cymbal"""
     key = "ICE"
 
-    print(repeatingKeyXOR(unhexlify(org.encode('utf-8').hex()), unhexlify(key.encode('utf-8').hex())))
+    print(repeatingKeyXOR(org.encode('utf-8'), key.encode('utf-8')))
