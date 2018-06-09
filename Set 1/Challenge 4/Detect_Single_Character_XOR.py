@@ -25,7 +25,7 @@ def bruteForce(binary):
     return strings
 
 if __name__ == "__main__":
-    dataList = readFile("\RIT\Crypto\hex_strings.txt")
+    dataList = readFile("hex_strings.txt")
 
     for data in dataList:
         analysis = bruteForce(unhexlify(data))
