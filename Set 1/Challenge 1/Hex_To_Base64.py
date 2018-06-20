@@ -1,3 +1,4 @@
+#Convert a hex string to base64.
 import base64
 from binascii import unhexlify
 
