@@ -78,7 +78,7 @@ def decryptXOR(text, key):
     return decrypted
 
 if __name__ == "__main__":
-    data = readFile("\RIT\Crypto\\base64text.txt")
+    data = readFile("\\base64text.txt")
     keysize = guessKeySize(data)
     blockList = splitEncodedString(data, keysize)
     key = ""
