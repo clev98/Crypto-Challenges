@@ -1,3 +1,4 @@
+#Break Repeating Key XOR
 import base64
 
 def readFile(path):
@@ -54,13 +55,8 @@ def breakSingleByteXOR(encryptedText):
     strings = []
 
     for key in range(256):
-        result = ""
-
-        for item in encryptedText:
-            result += chr(item^key)
-
         keys.append(chr(key))
-        strings.append(result)
+        strings.append(xor(encryptedText, (chr(key)*len(encryptedText)).encode('utf-8')))
 
     bestString = max(strings, key=lambda s: s.count(' '))
     
@@ -68,17 +64,16 @@ def breakSingleByteXOR(encryptedText):
         if bestString == strings[i]:
             return keys[i]
 
-def decryptXOR(text, key):
-    key = key*len(text)
-    decrypted = ""
+def xor(text, key):
+    output = ""
 
     for n in range(len(text)):
-        decrypted += chr(text[n]^ord(key[n]))
+        output += chr(text[n]^key[n])
         
-    return decrypted
+    return output
 
 if __name__ == "__main__":
-    data = readFile("\\base64text.txt")
+    data = readFile("base64text.txt")
     keysize = guessKeySize(data)
     blockList = splitEncodedString(data, keysize)
     key = ""
@@ -87,4 +82,4 @@ if __name__ == "__main__":
         key += breakSingleByteXOR(block)
 
     print("KEY: "+key+"\n")
-    print(decryptXOR(data, key))
+    print(xor(data, (key*len(data)).encode('utf-8')))
