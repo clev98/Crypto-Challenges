@@ -40,7 +40,7 @@ def guessKeySize(byteString):
             
     return rKeysize
 
-def splitEncodedString(byteString, keysize):
+def tranposeEncodedString(byteString, keysize):
     byteList = [byteString[i:i+keysize] for i in range(0, len(byteString), keysize)]
     blockList = [[] for n in range(keysize)]
     
@@ -75,7 +75,7 @@ def xor(text, key):
 if __name__ == "__main__":
     data = readFile("base64text.txt")
     keysize = guessKeySize(data)
-    blockList = splitEncodedString(data, keysize)
+    blockList = tranposeEncodedString(data, keysize)
     key = ""
 
     for block in blockList:
