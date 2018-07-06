@@ -28,7 +28,7 @@ if __name__ == "__main__":
     dataList = readFile("hex_strings.txt")
 
     for data in dataList:
-        analysis = bruteForce(unhexlify(data))
+        analysis = breakSingleByteXOR(unhexlify(data))
         possibleSoln = max(analysis, key=lambda s: s.count(' ')).strip('\n')
 
         if possibleSoln.isprintable():
