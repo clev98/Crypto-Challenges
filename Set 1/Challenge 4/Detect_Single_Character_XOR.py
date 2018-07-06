@@ -11,7 +11,7 @@ def readFile(file):
 
     return dataList
 
-def bruteForce(binary):
+def breakSingleByteXOR(binary):
     strings = []
     
     for key in range(256):
