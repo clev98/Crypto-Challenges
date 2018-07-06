@@ -1,7 +1,7 @@
 #Breaking single byte XOR ciphers by counting spaces in possible solns.
 from binascii import unhexlify
 
-def bruteForce(binary):
+def breakSingleByteXOR(binary):
     strings = []
     
     for key in range(256):
