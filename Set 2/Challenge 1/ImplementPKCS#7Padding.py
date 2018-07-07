@@ -1,10 +1,11 @@
 #Implement PKCS#7 Padding
 def addPKCS7Padding(text, blockSize, paddingChar):
-    neededPadding = blockSize - (len(text) % blockSize)
-
-    if neededPadding > 0:
+    if len(text) % blockSize:
+        neededPadding = blockSize - (len(text) % blockSize)
+        
         for n in range(neededPadding):
             text += paddingChar
+            
     return text
 
 def removePKCS7Padding(text, paddingChar):
