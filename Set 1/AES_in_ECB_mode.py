@@ -12,5 +12,5 @@ def decryptAES_ECB(cipher, key):
     return AES.new(key, AES.MODE_ECB).decrypt(cipher).decode('utf-8')
 
 if __name__ == "__main__":
-    cipher = readFile("\RIT\Crypto\Set 1\Challenge 7\\7.txt")
+    cipher = readFile("7.txt")
     print(decryptAES_ECB(cipher,"YELLOW SUBMARINE".encode('utf-8')))
