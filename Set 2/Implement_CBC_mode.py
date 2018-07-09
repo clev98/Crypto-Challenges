@@ -50,12 +50,12 @@ def encryptAES_ECB_CBC(plaintext, key, iv):
     return ciphertext
 
 def xor(string1, string2):
-    text = ""
+    text = bytearray(len(string1))
 
     for i in range(len(string1)):
-        text += chr(string1[i]^string2[i])
+        text[i] = string1[i]^string2[i]
 
-    return bytearray(text, 'utf-8')
+    return text
 
 if __name__ == "__main__":
     text = readFile("10.txt")
