@@ -1,4 +1,4 @@
-#Implement CBC mode
+#Implement AES_ECB_CBC mode
 from Crypto.Cipher import AES
 from binascii import a2b_base64
 
