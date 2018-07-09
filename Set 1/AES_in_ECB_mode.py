@@ -4,13 +4,14 @@ from binascii import a2b_base64
 
 def readFile(path):
     with open(path) as cipherText:
-        cipher = a2b_base64(''.join(cipherText.readlines()))
+        ciphertext = a2b_base64(''.join(cipherText.readlines()))
 
-    return cipher
+    return ciphertext
 
 def decryptAES_ECB(cipher, key):
     return AES.new(key, AES.MODE_ECB).decrypt(cipher).decode('utf-8')
 
 if __name__ == "__main__":
-    cipher = readFile("7.txt")
-    print(decryptAES_ECB(cipher,"YELLOW SUBMARINE".encode('utf-8')))
+    ciphertext = readFile("7.txt")
+    key = "YELLOW SUBMARINE".encode('utf-8')
+    print(decryptAES_ECB(ciphertext, key))
