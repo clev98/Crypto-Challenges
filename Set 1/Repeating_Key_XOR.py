@@ -1,12 +1,17 @@
 #Repeating-key XOR
 def repeatingKeyXOR(text, key):
-    xorString = ""
-    key = key*len(text)
+    xorString = bytearray(len(text))
+    i = 0
 
     for n in range(len(text)):
-        xorString += chr(text[n]^key[n])
+        xorString[n] = text[n]^key[i]
 
-    return xorString.encode('utf-8')
+        if i == len(key)-1:
+            i = 0
+        else:
+            i += 1
+
+    return xorString
 
 if __name__ == "__main__":
     text = """Burning 'em, if you ain't quick and nimble
