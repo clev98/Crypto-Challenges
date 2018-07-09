@@ -11,7 +11,7 @@ def readFile(path):
     return bytearray(base64.b64decode(data))
 
 def hammingDistance(string1, string2):
-    xorString = ''.join(format(x, '08b') for x in bytearray(xor(string1, string2), 'utf-8'))
+    xorString = ''.join(format(x, '08b') for x in xor(string1, string2))
     distance = 0
 
     for num in xorString:
@@ -53,20 +53,19 @@ def breakSingleByteXOR(encryptedText):
 
     for key in range(256):
         keys.append(chr(key))
-        #UTF-8 takes 1 to 4 bytes to encode. The key string below will get unneedingly large. Will fix later.
         strings.append(xor(encryptedText, (chr(key)*len(encryptedText)).encode('utf-8')))
 
-    bestString = max(strings, key=lambda s: s.count(' '))
+    bestString = max(strings, key=lambda s: s.count(' '.encode('utf-8')))
     
     for i in range(len(strings)):
         if bestString == strings[i]:
             return keys[i]
 
 def xor(text, key):
-    output = ""
+    output = bytearray(len(text))
 
     for n in range(len(text)):
-        output += chr(text[n]^key[n])
+        output[n] = text[n]^key[n]
         
     return output
 
