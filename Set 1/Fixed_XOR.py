@@ -9,9 +9,9 @@ def xor(string1, string2):
     for i in range(len(string1)):
         xorString += chr(string1[i]^string2[i])
 
-    return xorString.encode('utf-8').hex()
+    return xorString.encode('utf-8')
 
 if __name__ == "__main__":
     string1 = "1c0111001f010100061a024b53535009181c"
     string2 = "686974207468652062756c6c277320657965"
-    print(xor(unhexlify(string1),unhexlify(string2)))
+    print(xor(unhexlify(string1),unhexlify(string2)).hex())
