@@ -1,15 +1,15 @@
 #XOR two equal-length buffers and return the production
-from binascii import unhexlify, hexlify
+from binascii import unhexlify
 
 def xor(string1, string2):
     assert len(string1) == len(string2)
     
-    xorString = ""
+    xorString = bytearray(len(string1))
 
     for i in range(len(string1)):
-        xorString += chr(string1[i]^string2[i])
+        xorString[i] = string1[i]^string2[i]
 
-    return xorString.encode('utf-8')
+    return xorString
 
 if __name__ == "__main__":
     string1 = "1c0111001f010100061a024b53535009181c"
