@@ -3,13 +3,16 @@ from Crypto.Cipher import AES
 from binascii import a2b_base64
 
 def readFile(path):
-    with open(path) as cipherText:
-        ciphertext = a2b_base64(''.join(cipherText.readlines()))
+    with open(path) as file:
+        ciphertext = a2b_base64(''.join(file.readlines()))
 
     return ciphertext
 
-def decryptAES_ECB(cipher, key):
-    return AES.new(key, AES.MODE_ECB).decrypt(cipher).decode('utf-8')
+def decryptAES_ECB(ciphertext, key):
+    return AES.new(key, AES.MODE_ECB).decrypt(ciphertext)
+
+def encryptAES_ECB(ciphertext, key):
+    return AES.new(key, AES.MODE_ECB).encrypt(ciphertext)
 
 if __name__ == "__main__":
     ciphertext = readFile("7.txt")
