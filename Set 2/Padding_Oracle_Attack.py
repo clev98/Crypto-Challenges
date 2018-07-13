@@ -1,14 +1,19 @@
+#Padding Oracle Decryption Attack
+#Not actually a proper attack, but shows thinking behind the attack. 
 from Crypto.Cipher import AES
 from base64 import b64decode
 from collections import defaultdict
 from os import urandom
 
 RandomAESKey = urandom(AES.block_size)
+#Secret unknown text
 unknownText = bytearray(b64decode("Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK"))
 
+#The all knowing oracle, hallowed be thy name. 
 def oracle(knownText):
     return encryptAES_ECB(addPKCS7Padding(knownText+unknownText, AES.block_size, "\x04".encode('utf-8')), RandomAESKey)
 
+#Main logic
 def byteAtATime(oracle):
     blockSize = findBlocksize(oracle)
     roundedStringSize = int((len(oracle(bytearray()))/blockSize + 1)*blockSize)
