@@ -14,8 +14,8 @@ def oracle(knownText):
     return encryptAES_ECB(addPKCS7Padding(knownText+unknownText, AES.block_size, "\x04".encode('utf-8')), RandomAESKey)
 
 #Main logic
-def byteAtATime(oracle):
-    blockSize = findBlocksize(oracle)
+def byteAtATime():
+    blockSize = findBlocksize()
     roundedStringSize = int((len(oracle(bytearray()))/blockSize + 1)*blockSize)
     unknownString = bytearray()
 
@@ -31,7 +31,7 @@ def byteAtATime(oracle):
                 break
     return removePKCS7Padding(unknownString, "\x04".encode('utf-8'))
 
-def findBlocksize(oracle):
+def findBlocksize():
     unknownTextLength = len(oracle(bytearray()))
     i = 1
 
@@ -71,4 +71,4 @@ def removePKCS7Padding(text, paddingChar):
 
 if __name__ == "__main__":
     if detectECB(bytes(oracle(bytearray("YELLOW SUBMARINEYELLOW SUBMARINE", 'utf-8'))), AES.block_size):
-        print(byteAtATime(oracle).decode('utf-8'))
+        print(byteAtATime().decode('utf-8'))
