@@ -1,3 +1,6 @@
+#Padding Oracle Decryption Attack
+#Not actually a proper attack, but shows thinking behind the attack. 
+#Now with a randomly sized prefix attached.
 from Cryptodome.Cipher import AES
 from base64 import b64decode
 from collections import defaultdict
