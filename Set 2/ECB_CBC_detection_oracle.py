@@ -2,12 +2,12 @@
 #This will not correctly determine the encryption used on shorter messages.
 #Provided the plaintext has the same 16 bytes of text repeated at least once, the encryption method will be properly determined. 
 from os import urandom
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 from random import randint
 from collections import defaultdict
 
 def encryption_oracle(plaintext):
-    paddedPlaintext = addPKCS7Padding(urandom(randint(5,10))+plaintext+urandom(randint(5,10)), AES.block_size, "\x04".encode('utf-8'))
+    paddedPlaintext = addPKCS7Padding(urandom(randint(5,10))+plaintext+urandom(randint(5,10)), AES.block_size)
 
     if randint(0, 1):
         return encryptAES_ECB(paddedPlaintext, urandom(AES.block_size))
@@ -22,12 +22,10 @@ def detectECB(ciphertext, blocksize):
 
     return sum(repeats.values())
 
-def addPKCS7Padding(text, blockSize, paddingChar):
+def addPKCS7Padding(text, blockSize):
     if len(text) % blockSize:
-        neededPadding = blockSize - (len(text) % blockSize)
-        
-        for n in range(neededPadding):
-            text += paddingChar
+        neededPadding = blockSize - len(text) % blockSize
+        text += bytearray((chr(neededPadding)*neededPadding), 'utf-8')
             
     return text
 
@@ -35,7 +33,7 @@ def encryptAES_ECB(plaintext, key):
     return AES.new(key, AES.MODE_ECB).encrypt(plaintext)
 
 def encryptAES_ECB_CBC(plaintext, key, iv):
-    plaintext = addPKCS7Padding(plaintext, AES.block_size, "\x04".encode('utf-8'))
+    plaintext = addPKCS7Padding(plaintext, AES.block_size)
     ciphertext = bytearray(len(plaintext))
 
     for n in range(0, len(plaintext), AES.block_size):
