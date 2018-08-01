@@ -1,6 +1,3 @@
-#Padding Oracle Decryption Attack
-#Not actually a proper attack, but shows thinking behind the attack. 
-#Now with a randomly sized prefix attached.
 from Cryptodome.Cipher import AES
 from base64 import b64decode
 from collections import defaultdict
@@ -12,7 +9,7 @@ unknownText = bytearray(b64decode("Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wI
 randomPrefix = urandom(randint(0,256))
 
 def oracle(knownText):
-    return encryptAES_ECB(addPKCS7Padding(randomPrefix+knownText+unknownText, AES.block_size, "\x04".encode('utf-8')), RandomAESKey)
+    return encryptAES_ECB(addPKCS7Padding(randomPrefix+knownText+unknownText, AES.block_size), RandomAESKey)
 
 def byteAtATime():
     blockSize = findBlocksize()
@@ -31,7 +28,7 @@ def byteAtATime():
                 unknownString += chr(j).encode('utf-8')
                 break
             
-    return removePKCS7Padding(unknownString, "\x04".encode('utf-8'))
+    return removePKCS7Padding(unknownString, blockSize)
 
 def findPrefixLength(blocksize):
     for i in range(blocksize):
@@ -73,21 +70,19 @@ def detectECB(ciphertext, blocksize):
 def encryptAES_ECB(plaintext, key):
     return bytearray(AES.new(key, AES.MODE_ECB).encrypt(plaintext))
 
-def addPKCS7Padding(text, blockSize, paddingChar):
+def addPKCS7Padding(text, blockSize):
     if len(text) % blockSize:
-        neededPadding = blockSize - (len(text) % blockSize)
-        
-        for n in range(neededPadding):
-            text += paddingChar
+        neededPadding = blockSize - len(text) % blockSize
+        text += bytearray((chr(neededPadding)*neededPadding), 'utf-8')
             
     return text
 
-def removePKCS7Padding(text, paddingChar):
-    for n in range(len(text)-1, -1, -1):
-        if text[n] == ord(paddingChar):
-            text.remove(ord(paddingChar))
-            
-    return text
+def removePKCS7Padding(text, blockSize):
+    for n in range(len(text) - 1, len(text) - text[-1] - 1, -1):
+        if text[n] != text[-1]:
+            return text
+
+    return text[:-text[-1]]
 
 if __name__ == "__main__":
     print(byteAtATime().decode('utf-8'))
