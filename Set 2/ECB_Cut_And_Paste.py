@@ -1,6 +1,6 @@
 #ECB cut and paste
 from os import urandom
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 
 AESKey = urandom(AES.block_size)
 
@@ -20,24 +20,15 @@ def profileFor(email): #oracle
     return encryptAES_ECB(encoded, AESKey)
 
 def encryptAES_ECB(plaintext, key):
-    return bytearray(AES.new(key, AES.MODE_ECB).encrypt(addPKCS7Padding(plaintext, AES.block_size, "\x04".encode('utf-8'))))
+    return bytearray(AES.new(key, AES.MODE_ECB).encrypt(addPKCS7Padding(plaintext, AES.block_size)))
 
 def decryptAES_ECB(ciphertext, key):
     return AES.new(key, AES.MODE_ECB).decrypt(ciphertext)
 
-def addPKCS7Padding(text, blockSize, paddingChar):
+def addPKCS7Padding(text, blockSize):
     if len(text) % blockSize:
-        neededPadding = blockSize - (len(text) % blockSize)
-        
-        for n in range(neededPadding):
-            text += paddingChar
-            
-    return text
-
-def removePKCS7Padding(text, paddingChar):
-    for n in range(len(text)-1, -1, -1):
-        if text[n] == ord(paddingChar):
-            text.remove(ord(paddingChar))
+        neededPadding = blockSize - len(text) % blockSize
+        text += bytearray((chr(neededPadding)*neededPadding), 'utf-8')
             
     return text
 
@@ -70,7 +61,7 @@ if __name__ == "__main__":
     else:
         neededBytes = 0
 
-    email = bytearray("A"*neededBytes, 'utf-8') + addPKCS7Padding("admin".encode('utf-8'), blockSize, "\x04".encode('utf-8'))
+    email = bytearray("A"*neededBytes, 'utf-8') + addPKCS7Padding("admin".encode('utf-8'), blockSize)
     postfix = profileFor(email)[currentBytes + neededBytes:2*blockSize]
     adminUser = prefix + postfix
 
