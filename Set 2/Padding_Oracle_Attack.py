@@ -1,22 +1,18 @@
-#Padding Oracle Decryption Attack
-#Not actually a proper attack, but shows thinking behind the attack. 
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 from base64 import b64decode
 from collections import defaultdict
 from os import urandom
 
 RandomAESKey = urandom(AES.block_size)
-#Secret unknown text
 unknownText = bytearray(b64decode("Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK"))
 
-#The all knowing oracle, hallowed be thy name. 
 def oracle(knownText):
-    return encryptAES_ECB(addPKCS7Padding(knownText+unknownText, AES.block_size, "\x04".encode('utf-8')), RandomAESKey)
+    return encryptAES_ECB(addPKCS7Padding(knownText+unknownText, AES.block_size), RandomAESKey)
 
-#Main logic
 def byteAtATime():
     blockSize = findBlocksize()
-    roundedStringSize = int((len(oracle(bytearray()))/blockSize + 1)*blockSize)
+    roundedStringSize = len(oracle(bytearray()))
+    
     unknownString = bytearray()
 
     for i in range(roundedStringSize - 1, 0, -1):
@@ -29,7 +25,7 @@ def byteAtATime():
             if tmpString1 == tmpString2:
                 unknownString += chr(j).encode('utf-8')
                 break
-    return removePKCS7Padding(unknownString, "\x04".encode('utf-8'))
+    return removePKCS7Padding(unknownString, blockSize)
 
 def findBlocksize():
     unknownTextLength = len(oracle(bytearray()))
@@ -53,21 +49,19 @@ def detectECB(ciphertext, blocksize):
 def encryptAES_ECB(plaintext, key):
     return bytearray(AES.new(key, AES.MODE_ECB).encrypt(plaintext))
 
-def addPKCS7Padding(text, blockSize, paddingChar):
+def addPKCS7Padding(text, blockSize):
     if len(text) % blockSize:
-        neededPadding = blockSize - (len(text) % blockSize)
-        
-        for n in range(neededPadding):
-            text += paddingChar
+        neededPadding = blockSize - len(text) % blockSize
+        text += bytearray((chr(neededPadding)*neededPadding), 'utf-8')
             
     return text
 
-def removePKCS7Padding(text, paddingChar):
-    for n in range(len(text)-1, -1, -1):
-        if text[n] == ord(paddingChar):
-            text.remove(ord(paddingChar))
-            
-    return text
+def removePKCS7Padding(text, blockSize):
+    for n in range(len(text) - 1, len(text) - text[-1] - 1, -1):
+        if text[n] != text[-1]:
+            return text
+
+    return text[:-text[-1]]
 
 if __name__ == "__main__":
     if detectECB(bytes(oracle(bytearray("YELLOW SUBMARINEYELLOW SUBMARINE", 'utf-8'))), AES.block_size):
