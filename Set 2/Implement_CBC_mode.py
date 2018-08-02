@@ -28,7 +28,7 @@ def decryptAES_ECB(ciphertext, key):
 def decryptAES_ECB_CBC(ciphertext, key, iv):
     plaintext = bytearray(len(ciphertext))
 
-    for n in range(0, len(text), AES.block_size):
+    for n in range(0, len(ciphertext), AES.block_size):
         plaintext[n: n+AES.block_size] = xor(decryptAES_ECB(ciphertext[n: n+AES.block_size], key), iv)
         iv = ciphertext[n: n+AES.block_size]
 
@@ -41,7 +41,7 @@ def encryptAES_ECB_CBC(plaintext, key, iv):
     plaintext = addPKCS7Padding(plaintext, AES.block_size)
     ciphertext = bytearray(len(plaintext))
 
-    for n in range(0, len(text), AES.block_size):
+    for n in range(0, len(plaintext), AES.block_size):
         ciphertext[n: n+AES.block_size] = encryptAES_ECB(xor(plaintext[n: n+AES.block_size], iv), key)
         iv = ciphertext[n: n+AES.block_size]
 
