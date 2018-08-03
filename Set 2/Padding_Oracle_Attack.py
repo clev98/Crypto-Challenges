@@ -1,8 +1,8 @@
 from Cryptodome.Cipher import AES
 from base64 import b64decode
-from collections import defaultdict
 from os import urandom
 from Set1.AES_in_ECB_mode import encryptAES_ECB
+from Set1.Detect_AES_in_ECB_mode import detectECB
 from Implement_PKCS7_Padding import addPKCS7Padding, removePKCS7Padding
 
 RandomAESKey = urandom(AES.block_size)
@@ -43,15 +43,6 @@ def findBlocksize():
         if newTextLength - unknownTextLength:
             return newTextLength - unknownTextLength
         i += 1
-
-
-def detectECB(ciphertext, blocksize):
-    repeats = defaultdict(lambda: -1)
-
-    for n in range(0, len(ciphertext), blocksize):
-        repeats[ciphertext[n:n+blocksize]] += 1
-
-    return sum(repeats.values()) > 0
 
 
 if __name__ == "__main__":
