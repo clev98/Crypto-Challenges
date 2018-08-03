@@ -1,25 +1,29 @@
-#Detect AES in ECB mode
+# Detect AES in ECB mode
 from collections import defaultdict
 
-def detectECB(path, blockLength=16):
+
+def readFile(path):
+    lines = []
+
     with open(path) as file:
-        maxRepeats = 0
-        probableCiphertext = ""
-        
         for line in file:
-            repeats = defaultdict(lambda: -1)
-            line = line.strip()
-            
-            for n in range(0, len(line), blockLength):
-                repeats[line[n:n+blockLength]] += 1
+            lines.append(line)
 
-            loopSum = sum(repeats.values())
+    return lines
 
-            if loopSum > maxRepeats:
-                maxRepeats = loopSum
-                probableCiphertext = line
 
-    return probableCiphertext
+def detectECB(ciphertext, blocksize=16):
+    repeats = defaultdict(lambda: -1)
+
+    for n in range(0, len(ciphertext), blocksize):
+        repeats[ciphertext[n:n+blocksize]] += 1
+
+    return sum(repeats.values())
+
 
 if __name__ == "__main__":
-    print(detectECB("8.txt"))
+    lines = readFile(r"8.txt")
+
+    for line in lines:
+        if detectECB(line) > 0:
+            print(line)
