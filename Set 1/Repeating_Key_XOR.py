@@ -1,21 +1,18 @@
-#Repeating-key XOR
-def repeatingKeyXOR(text, key):
-    xorString = bytearray(len(text))
-    i = 0
+# XOR two equal-length buffers and return the production
+from binascii import unhexlify
 
-    for n in range(len(text)):
-        xorString[n] = text[n]^key[i]
 
-        if i == len(key)-1:
-            i = 0
-        else:
-            i += 1
+def xor(string1, string2):
+    assert len(string1) <= len(string2)
+    xorString = bytearray(len(string1))
+
+    for i in range(len(string1)):
+        xorString[i] = string1[i] ^ string2[i]
 
     return xorString
 
-if __name__ == "__main__":
-    text = """Burning 'em, if you ain't quick and nimble
-I go crazy when I hear a cymbal""".encode('utf-8')
-    key = "ICE".encode('utf-8')
 
-    print(repeatingKeyXOR(text, key).hex())
+if __name__ == "__main__":
+    string1 = "1c0111001f010100061a024b53535009181c"
+    string2 = "686974207468652062756c6c277320657965"
+    print(xor(unhexlify(string1), unhexlify(string2)).hex())
