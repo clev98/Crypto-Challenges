@@ -1,10 +1,14 @@
-#Detect whether ECB or CBC is being used.
-#This will not correctly determine the encryption used on shorter messages.
-#Provided the plaintext has the same 16 bytes of text repeated at least once, the encryption method will be properly determined. 
+# Detect whether ECB or CBC is being used.
+# This will not correctly determine the encryption used on shorter messages.
+# Provided the plaintext has the same 16 bytes of text repeated at least once, the encryption method will be properly determined.
 from os import urandom
 from Cryptodome.Cipher import AES
 from random import randint
-from collections import defaultdict
+from Set1.AES_in_ECB_mode import encryptAES_ECB
+from Implement_PKCS7_Padding import addPKCS7Padding
+from Implement_CBC_mode import encryptAES_ECB_CBC
+from Set1.Detect_AES_in_ECB_mode import detectECB
+
 
 def encryption_oracle(plaintext):
     paddedPlaintext = addPKCS7Padding(urandom(randint(5,10))+plaintext+urandom(randint(5,10)), AES.block_size)
@@ -14,41 +18,6 @@ def encryption_oracle(plaintext):
     else:
         return encryptAES_ECB_CBC(paddedPlaintext, urandom(AES.block_size), urandom(AES.block_size))
 
-def detectECB(ciphertext, blocksize): 
-    repeats = defaultdict(lambda: -1)
-            
-    for n in range(0, len(ciphertext), blocksize):
-        repeats[ciphertext[n:n+blocksize]] += 1
-
-    return sum(repeats.values())
-
-def addPKCS7Padding(text, blockSize):
-    if len(text) % blockSize:
-        neededPadding = blockSize - len(text) % blockSize
-        text += bytearray((chr(neededPadding)*neededPadding), 'utf-8')
-            
-    return text
-
-def encryptAES_ECB(plaintext, key):
-    return AES.new(key, AES.MODE_ECB).encrypt(plaintext)
-
-def encryptAES_ECB_CBC(plaintext, key, iv):
-    plaintext = addPKCS7Padding(plaintext, AES.block_size)
-    ciphertext = bytearray(len(plaintext))
-
-    for n in range(0, len(plaintext), AES.block_size):
-        ciphertext[n: n+AES.block_size] = encryptAES_ECB(xor(plaintext[n: n+AES.block_size], iv), key)
-        iv = ciphertext[n: n+AES.block_size]
-
-    return ciphertext
-
-def xor(string1, string2):
-    text = bytearray(len(string1))
-
-    for i in range(len(string1)):
-        text[i] = string1[i]^string2[i]
-
-    return text
 
 if __name__ == "__main__":
     text = """You might think I'm crazy
@@ -87,9 +56,9 @@ This chancy rendezvous
 (All I want) but all I want is you
 All I want is you
 All I want is you"""
-    
+
     plaintext = bytearray(text, 'utf-8')
-    
+
     if detectECB(bytes(encryption_oracle(plaintext)), AES.block_size) > 0:
         print("Encrypted with ECB")
     else:
