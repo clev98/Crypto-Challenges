@@ -68,14 +68,20 @@ def breakSingleByteXOR(encryptedText):
             return keys[i]
 
 
-if __name__ == "__main__":
-    encodedString = readFile(r"6.txt")
+def breakRepeatingKeyXOR(encodedString):
     keysize = guessKeySize(encodedString)
     blockList = tranposeEncodedString(encodedString, keysize)
     key = ""
 
     for block in blockList:
         key += breakSingleByteXOR(block)
+
+    return key
+
+
+if __name__ == "__main__":
+    encodedString = readFile(r"6.txt")
+    key = breakRepeatingKeyXOR(encodedString)
 
     print("KEY: "+key+"\n")
     print(xor(encodedString, (key*len(encodedString)).encode('utf-8')))
