@@ -35,7 +35,7 @@ def encryptAES_ECB_CBC(plaintext, key, iv):
 
 
 if __name__ == "__main__":
-    text = readFile(r"C:\Users\Connor\Desktop\Code\Python3\Crypto\Set 2\10.txt")
+    text = readFile(r"10.txt")
     key = "YELLOW SUBMARINE".encode('utf-8')
     # iv being the initialization vector
     iv = ("\x00"*AES.block_size).encode('utf-8')
