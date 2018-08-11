@@ -1,18 +1,29 @@
-# XOR two equal-length buffers and return the production
-from binascii import unhexlify
+# Repeating-key XOR
+from Fixed_XOR import xor
 
 
-def xor(string1, string2):
-    assert len(string1) <= len(string2)
-    xorString = bytearray(len(string1))
+def repeatingKeyXOR(text, key):
+    assert len(text) >= len(key)
 
-    for i in range(len(string1)):
-        xorString[i] = string1[i] ^ string2[i]
+    if not len(text) % len(key):
+        return xor(text, key*(len(text)/len(key)))
+    else:
+        count = 0
+        encoded = bytearray()
 
-    return xorString
+        for char in range(len(text)):
+            encoded += bytearray([text[char] ^ key[count]])
+
+            if count == len(key) - 1:
+                count = 0
+            else:
+                count += 1
+        return encoded
 
 
 if __name__ == "__main__":
-    string1 = "1c0111001f010100061a024b53535009181c"
-    string2 = "686974207468652062756c6c277320657965"
-    print(xor(unhexlify(string1), unhexlify(string2)).hex())
+    text = """Burning 'em, if you ain't quick and nimble
+I go crazy when I hear a cymbal""".encode('utf-8')
+    key = "ICE".encode('utf-8')
+
+    print(repeatingKeyXOR(text, key).hex())
