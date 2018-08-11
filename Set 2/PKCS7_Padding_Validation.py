@@ -5,7 +5,7 @@ def testPadding(text, blocksize):
     if len(text) % blocksize:
         raise Exception("Invalid PKCS7 Padding")
     
-    for n in range(len(text) - 1, len(text) - text[-1], -1):
+    for n in range(len(text) - 1, len(text) - text[-1] - 1, -1):
         if text[n] != text[-1]:
             raise Exception("Invalid PKCS7 Padding")
 
