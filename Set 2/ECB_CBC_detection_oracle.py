@@ -4,10 +4,10 @@
 from os import urandom
 from Cryptodome.Cipher import AES
 from random import randint
-from Set1.AES_in_ECB_mode import encryptAES_ECB
+from AES_in_ECB_mode import encryptAES_ECB
 from Implement_PKCS7_Padding import addPKCS7Padding
 from Implement_CBC_mode import encryptAES_ECB_CBC
-from Set1.Detect_AES_in_ECB_mode import detectECB
+from Detect_AES_in_ECB_mode import detectECB
 
 
 def encryption_oracle(plaintext):
