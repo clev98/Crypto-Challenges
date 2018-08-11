@@ -1,15 +1,15 @@
-#Validate PKCS7 Padding
-from Cryptodome.Cipher import AES
+# Validate PKCS7 Padding
+def testPadding(text):
+    paddingByte = text[-1]
+    padding = text[-paddingByte:]
 
-def testPadding(text, blocksize):
-    if len(text) % blocksize:
-        raise Exception("Invalid PKCS7 Padding")
-    
-    for n in range(len(text) - 1, len(text) - text[-1] - 1, -1):
-        if text[n] != text[-1]:
+    for byte in padding:
+        if byte != paddingByte:
             raise Exception("Invalid PKCS7 Padding")
-
     return text
 
+
 if __name__ == "__main__":
-    print(testPadding("ICE ICE BABY\x04\x04\x04\x04".encode('utf-8'), AES.block_size))
+    test = b'\x94\x84\x12\t\xa5\xe6\xc6\x8b\x1a\xa7o\x8c\xf6@\xaf\x01'
+    print(test)
+    testPadding(test)
