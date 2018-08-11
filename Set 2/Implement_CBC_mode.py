@@ -1,16 +1,9 @@
 # Implement CBC mode
 from Cryptodome.Cipher import AES
 from binascii import a2b_base64
-from Set1.Fixed_XOR import xor
-from Set1.AES_in_ECB_mode import decryptAES_ECB, encryptAES_ECB
-from Implement_PKCS7_Padding import addPKCS7Padding, removePKCS7Padding
-
-
-def readFile(path):
-    with open(path) as file:
-        ciphertext = a2b_base64(''.join(file.readlines()))
-
-    return ciphertext
+from Fixed_XOR import xor
+from AES_in_ECB_mode import decryptAES_ECB, encryptAES_ECB
+from Implement_PKCS7_Padding import addPKCS7Padding
 
 
 def decryptAES_ECB_CBC(ciphertext, key, iv):
@@ -20,7 +13,7 @@ def decryptAES_ECB_CBC(ciphertext, key, iv):
         plaintext[n: n+AES.block_size] = xor(decryptAES_ECB(ciphertext[n: n+AES.block_size], key), iv)
         iv = ciphertext[n: n+AES.block_size]
 
-    return removePKCS7Padding(plaintext, AES.block_size)
+    return plaintext
 
 
 def encryptAES_ECB_CBC(plaintext, key, iv):
@@ -35,12 +28,10 @@ def encryptAES_ECB_CBC(plaintext, key, iv):
 
 
 if __name__ == "__main__":
-    text = readFile(r"10.txt")
+    with open(r"10.txt") as file:
+        ciphertext = a2b_base64(''.join(file.readlines()))
+
     key = "YELLOW SUBMARINE".encode('utf-8')
     # iv being the initialization vector
     iv = ("\x00"*AES.block_size).encode('utf-8')
-    print(decryptAES_ECB_CBC(text, key, iv))
-
-    # Test
-    #plaintext = bytearray("Please work code", 'utf-8')
-    #print(decryptAES_ECB_CBC(encryptAES_ECB_CBC(plaintext, key, iv), key, iv))
+    print(decryptAES_ECB_CBC(ciphertext, key, iv))
