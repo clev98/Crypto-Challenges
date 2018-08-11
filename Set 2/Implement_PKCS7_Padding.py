@@ -9,11 +9,7 @@ def addPKCS7Padding(text, blockSize):
     return text
 
 
-def removePKCS7Padding(text, blockSize):
-    for n in range(len(text) - 1, len(text) - text[-1] - 1, -1):
-        if text[n] != text[-1]:
-            return text
-
+def removePKCS7Padding(text):
     return text[:-text[-1]]
 
 
@@ -22,5 +18,5 @@ if __name__ == "__main__":
 
     addedPKCS = addPKCS7Padding(text, 16)
     print(addedPKCS)
-    removedPKCS = removePKCS7Padding(addedPKCS, 16)
+    removedPKCS = removePKCS7Padding(addedPKCS)
     print(removedPKCS)
