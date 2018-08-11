@@ -1,7 +1,7 @@
 # ECB cut and paste
 from os import urandom
 from Cryptodome.Cipher import AES
-from Set1.AES_in_ECB_mode import encryptAES_ECB, decryptAES_ECB
+from AES_in_ECB_mode import encryptAES_ECB, decryptAES_ECB
 from Implement_PKCS7_Padding import addPKCS7Padding
 
 
