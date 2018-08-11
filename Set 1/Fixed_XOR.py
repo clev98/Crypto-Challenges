@@ -3,7 +3,7 @@ from binascii import unhexlify
 
 
 def xor(string1, string2):
-    assert len(string1) <= len(string2)
+    assert len(string1) == len(string2)
     xorString = bytearray(len(string1))
 
     for i in range(len(string1)):
