@@ -4,18 +4,12 @@ from binascii import unhexlify
 from Break_Single_Byte_XOR import breakSingleByteXOR
 
 
-def readFile(file):
+if __name__ == "__main__":
     strList = []
 
-    with open(file) as data:
+    with open(r"4.txt") as data:
         for line in data:
             strList.append(line.strip())
-
-    return strList
-
-
-if __name__ == "__main__":
-    strList = readFile(r"C:\Users\Connor\Desktop\Code\Python3\Crypto\Set 1\4.txt")
 
     for string in strList:
         possibleSoln = breakSingleByteXOR(unhexlify(string))
