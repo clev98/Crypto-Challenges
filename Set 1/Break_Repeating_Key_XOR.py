@@ -1,16 +1,7 @@
 # Break Repeating Key XOR
 from base64 import b64decode
 from Fixed_XOR import xor
-
-
-def readFile(path):
-    data = ""
-
-    with open(path, "r") as file:
-        for line in file:
-            data += line.strip().strip("\n")
-
-    return bytearray(b64decode(data))
+from Repeating_Key_XOR import repeatingKeyXOR
 
 
 def hammingDistance(string1, string2):
@@ -59,7 +50,7 @@ def breakSingleByteXOR(encryptedText):
 
     for key in range(256):
         keys.append(chr(key))
-        strings.append(xor(encryptedText, (chr(key)*len(encryptedText)).encode('utf-8')))
+        strings.append(xor(encryptedText, bytearray([key]*len(encryptedText))))
 
     bestString = max(strings, key=lambda s: s.count(' '.encode('utf-8')))
 
@@ -80,8 +71,13 @@ def breakRepeatingKeyXOR(encodedString):
 
 
 if __name__ == "__main__":
-    encodedString = readFile(r"6.txt")
-    key = breakRepeatingKeyXOR(encodedString)
+    data = bytearray()
+
+    with open(r"6.txt", "r") as file:
+        for line in file:
+            data += b64decode(line.strip().strip("\n"))
+
+    key = breakRepeatingKeyXOR(data)
 
     print("KEY: "+key+"\n")
-    print(xor(encodedString, (key*len(encodedString)).encode('utf-8')))
+    print(repeatingKeyXOR(data, bytearray(key, 'utf-8')))
