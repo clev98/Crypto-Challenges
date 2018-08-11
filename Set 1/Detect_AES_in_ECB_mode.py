@@ -2,16 +2,6 @@
 from collections import defaultdict
 
 
-def readFile(path):
-    lines = []
-
-    with open(path) as file:
-        for line in file:
-            lines.append(line)
-
-    return lines
-
-
 def detectECB(ciphertext, blocksize=16):
     repeats = defaultdict(lambda: -1)
 
@@ -22,7 +12,11 @@ def detectECB(ciphertext, blocksize=16):
 
 
 if __name__ == "__main__":
-    lines = readFile(r"8.txt")
+    lines = []
+
+    with open(r"8.txt") as file:
+        for line in file:
+            lines.append(line)
 
     for line in lines:
         if detectECB(line) > 0:
