@@ -1,8 +1,9 @@
+#Basic demonstration of a padding oracle attack. Now with a random prefix.
 from Cryptodome.Cipher import AES
 from base64 import b64decode
 from os import urandom
 from random import randint
-from Set1.AES_in_ECB_mode import encryptAES_ECB
+from AES_in_ECB_mode import encryptAES_ECB
 from Implement_PKCS7_Padding import addPKCS7Padding, removePKCS7Padding
 
 RandomAESKey = urandom(AES.block_size)
@@ -31,7 +32,7 @@ def byteAtATime():
                 unknownString += chr(j).encode('utf-8')
                 break
 
-    return removePKCS7Padding(unknownString, blockSize)
+    return removePKCS7Padding(unknownString)
 
 
 def findPrefixLength(blocksize):
