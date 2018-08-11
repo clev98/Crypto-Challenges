@@ -8,7 +8,7 @@ def breakSingleByteXOR(byteStr):
     strings = []
 
     for key in range(256):
-        strings.append(xor(byteStr, bytearray((chr(key)*len(byteStr)), 'utf-8')))
+        strings.append(xor(byteStr, bytearray([key]*len(byteStr))))
 
     return max(strings, key=lambda s: s.count(' '.encode('utf-8')))
 
