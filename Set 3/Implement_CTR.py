@@ -15,7 +15,7 @@ def xor(string1, string2):
     return xortext
 
 
-def encryptAES_CTR(key, nonce, plaintext):
+def cryptAES_CTR(key, nonce, plaintext):
     counter = 0
     nonce = bytearray(pack('<Q', nonce))
     ciphertext = bytearray()
@@ -28,22 +28,9 @@ def encryptAES_CTR(key, nonce, plaintext):
     return ciphertext
 
 
-def decryptAES_CTR(key, nonce, ciphertext):
-    counter = 0
-    nonce = bytearray(pack('<Q', nonce))
-    plaintext = bytearray()
-
-    for n in range(0, len(ciphertext), AES.block_size):
-        cipher = encryptAES_ECB(nonce + bytearray(pack('<Q', counter)), key)
-        plaintext += xor(ciphertext[n:n+AES.block_size], cipher)
-        counter += 1
-
-    return plaintext
-
-
 if __name__ == "__main__":
     ciphertext = b64decode("L77na/nrFsKvynd6HzOoG7GHTLXsTVu9qvY/2syLXzhPweyyMTJULu/6/kXX0KSvoOLSFQ==")
     key = bytearray("YELLOW SUBMARINE", 'utf-8')
-    plaintext = decryptAES_CTR(key, 0, ciphertext)
+    plaintext = cryptAES_CTR(key, 0, ciphertext)
     print(plaintext)
-    print(encryptAES_CTR(key, 0, plaintext) == ciphertext)
+    print(cryptAES_CTR(key, 0, plaintext) == ciphertext)
