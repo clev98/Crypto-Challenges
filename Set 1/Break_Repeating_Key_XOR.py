@@ -20,7 +20,7 @@ def guessKeySize(byteString):
     normalizedDistance = 0
     rKeysize = 0
 
-    for keysize in range(2, 40):
+    for keysize in range(2, len(byteString)//2):
         for j in range(len(byteString)//keysize):
             normalizedDistance += hammingDistance(byteString[j:j+keysize], byteString[j+keysize:j+2*keysize])/keysize
 
